@@ -354,7 +354,9 @@ namespace DrawNassiOpenGL.DNDEngine.Objects
         /// <returns></returns>
         public virtual bool IsColisionForSticking(SimpleObject simp)
         {
-            if (Y + Height <= simp.Y && Y >= simp.Y - simp.Height * 1.5 && this != simp)
+            if (Y + Height <= simp.Y && Y >= simp.Y - Height * 1.2 
+                && X * 0.85 >= simp.X && X + Width <= simp.X + simp.Width * 1.15
+                && this != simp)
             {
                 return true;
             }
@@ -372,7 +374,6 @@ namespace DrawNassiOpenGL.DNDEngine.Objects
             {
                 if (IsColisionForSticking(simp))
                 {
-                    Move(simp.X, simp.Y - Height);
                     return true;
                 }
             }

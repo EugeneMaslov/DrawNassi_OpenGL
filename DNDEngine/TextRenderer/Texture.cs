@@ -72,17 +72,12 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
             // Load the image
             using (var image = new Bitmap((int)textRenderer.Width, (int)textRenderer.Height))
             {
-                const int maxLen = 30;
-                float emSize = (textRenderer.Height / textRenderer.Text.Length);
+                const int maxLen = 20;
+                float emSize;
 
                 Graphics g = Graphics.FromImage(image);
                 g.SmoothingMode = SmoothingMode.HighQuality;
                 Rectangle rectangle = new Rectangle();
-
-                Font font = new Font(
-                    textRenderer.FontFamily,
-                    emSize,
-                    textRenderer.FontStyle);
 
                 SolidBrush brush = new SolidBrush(
                     Color.FromArgb(
@@ -103,21 +98,39 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
                 {
                     case "Branch Block":
                         {
-                            rectangle = new Rectangle((int)textRenderer.Width / 4, 0, (int)textRenderer.Width / 2, (int)textRenderer.Height / 4);
-                            emSize = textRenderer.Height / 4 / textRenderer.Text.Length;
+                            if (textRenderer.Text.Length > maxLen)
+                            {
+                                rectangle = new Rectangle((int)textRenderer.Width / 4, 0, (int)textRenderer.Width / 2, (int)textRenderer.Height / 4);
+                                emSize = textRenderer.Height / 2 / textRenderer.Text.Length;
+                            }
+                            else
+                            {
+                                rectangle = new Rectangle((int)textRenderer.Width / 4, 0, (int)textRenderer.Width / 2, (int)textRenderer.Height / 2);
+                                emSize = textRenderer.Height / 2 / textRenderer.Text.Length;
+                            }
                         }
                         break;
 
                     default:
                         {
                             if (textRenderer.Text.Length > maxLen)
-                                rectangle = new Rectangle(0, 0, (int)textRenderer.Width, (int)textRenderer.Height / 2);
+                            {
+                                rectangle = new Rectangle(0, 0, (int)textRenderer.Width, (int)(textRenderer.Height / 2f));
+                                emSize = textRenderer.Height / textRenderer.Text.Length * 2;
+                            }
                             else
+                            {
                                 rectangle = new Rectangle(0, 0, (int)textRenderer.Width, (int)textRenderer.Height);
-                            emSize = textRenderer.Height / 2 / textRenderer.Text.Length;
+                                emSize = textRenderer.Height / textRenderer.Text.Length;
+                            }
                         }
                         break;
                 }
+                
+                Font font = new Font(
+                    textRenderer.FontFamily,
+                    emSize*4,
+                    textRenderer.FontStyle);
 
                 if (textRenderer.Text.Length > maxLen)
                 {
@@ -126,6 +139,7 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
                 }
                 else
                 {
+                    
                     DrawString(g, textRenderer.Text, font, stringFormat, brush, rectangle, 0);
                 }
 

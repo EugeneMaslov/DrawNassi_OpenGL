@@ -55,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Composite\NoComposeBlock.cs" />
+    <Compile Include="Models\Composite\UnitBlock.cs" />
     <Compile Include="Views\DrawNassiForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +74,12 @@
     <Compile Include="DNDEngine\TextRenderer\TextRenderer.cs" />
     <Compile Include="DNDEngine\TextRenderer\Texture.cs" />
     <Compile Include="ViewModels\BlockViewModel.cs" />
+    <Compile Include="Views\SetBlock.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\SetBlock.Designer.cs">
+      <DependentUpon>SetBlock.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Views\DrawNassiForm.resx">
       <DependentUpon>DrawNassiForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -84,6 +92,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\SetBlock.resx">
+      <DependentUpon>SetBlock.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

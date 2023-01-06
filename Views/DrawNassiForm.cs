@@ -1,20 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL4;
-using OpenTK;
-using OpenTK.Platform.Windows;
 using OpenTK.Graphics;
-using System.Threading;
 using DrawNassiOpenGL.Models;
 using DrawNassiOpenGL.ViewModels;
-using DrawNassiOpenGL.DNDEngine.TextRenderer;
 using DrawNassiOpenGL.DNDEngine.Objects;
 
 namespace DrawNassiOpenGL.Views
@@ -23,6 +12,7 @@ namespace DrawNassiOpenGL.Views
     {
 
         private BlockViewModel blockView;
+        private SetBlock SetBlockWindow;
         public DrawNassiForm()
         {
             InitializeComponent();
@@ -35,6 +25,7 @@ namespace DrawNassiOpenGL.Views
             glControl1.MakeCurrent();
             glControl1.VSync = true;
             blockView = new BlockViewModel();
+            SetBlockWindow = new SetBlock();
             GL.Viewport(0, 0, glControl1.Width, glControl1.Height);
             GL.Enable(EnableCap.LineSmooth);
             GL.Enable(EnableCap.Texture2D);
@@ -105,6 +96,16 @@ namespace DrawNassiOpenGL.Views
                 if (blockView.Down(e.X, e.Y, glControl1.ClientRectangle.Width, glControl1.ClientRectangle.Height)) 
                 {
                     Cursor = Cursors.Hand;
+                    Draw();
+                }
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                Block block = blockView.DownEdit(e.X, e.Y, glControl1.ClientRectangle.Width, glControl1.ClientRectangle.Height);
+                if (block != null)
+                {
+                    SetBlockWindow.EditBlock = block;
+                    SetBlockWindow.ShowDialog();
                     Draw();
                 }
             }

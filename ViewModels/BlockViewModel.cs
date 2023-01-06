@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DrawNassiOpenGL.Models;
+using DrawNassiOpenGL.Models.Composite;
 
 namespace DrawNassiOpenGL.ViewModels
 {
@@ -116,9 +117,7 @@ namespace DrawNassiOpenGL.ViewModels
         {
             if (activeBlock != null)
             {
-                activeBlock.X = activeBlock.NormalizeX(x, clRectW) - deltaX;
-                activeBlock.Y = activeBlock.NormalizeY(y, clRectH) - deltaY;
-                activeBlock.TextRenderer.Move(activeBlock.X, activeBlock.Y);
+                activeBlock.Move(activeBlock.NormalizeX(x, clRectW) - deltaX, activeBlock.NormalizeY(y, clRectH) - deltaY);
                 return true;
             }
             return false;
@@ -156,11 +155,24 @@ namespace DrawNassiOpenGL.ViewModels
                     deltaX = item.NormalizeX(x, clRectW) - item.X;
                     deltaY = item.NormalizeY(y, clRectH) - item.Y;
                     activeBlock = item;
+                    RemoveOutBlock(activeBlock);
                     Swap(blocks.IndexOf(activeBlock), blocks.Count - 1);
                     return true;
                 }
             }
             return false;
+        }
+
+        public Block DownEdit(float x, float y, float clRectW, float clRectH)
+        {
+            foreach (Block item in blocks)
+            {
+                if (item.IsCoolisionCursor(x, y, clRectW, clRectH))
+                {
+                    return item;
+                }
+            }
+            return null;
         }
         
         /// <summary>
@@ -202,6 +214,22 @@ namespace DrawNassiOpenGL.ViewModels
                 Stick(activeBlock);
                 activeBlock = null;
                 return true;
+            }
+            return false;
+        }
+
+        public bool RemoveOutBlock(Block block)
+        {
+            if (block != null)
+            {
+                foreach (Block blockItem in blocks)
+                {
+                    if ((blockItem as NoComposeBlock).IsHaveThisBlock(block))
+                    {
+                        (blockItem as NoComposeBlock).RemoveThisBlock(block);
+                        return true;
+                    }
+                }
             }
             return false;
         }

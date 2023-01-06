@@ -8,13 +8,14 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System.Drawing;
 using DrawNassiOpenGL.DNDEngine.TextRenderer;
+using DrawNassiOpenGL.Models.Composite;
 
 namespace DrawNassiOpenGL.Models
 {
     /// <summary>
     /// Операционный блок
     /// </summary>
-    public class OperationBlock : Block
+    public class OperationBlock : NoComposeBlock
     {
         #region Constructors
 

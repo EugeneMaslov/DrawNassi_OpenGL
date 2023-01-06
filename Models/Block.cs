@@ -204,6 +204,20 @@ namespace DrawNassiOpenGL.Models
         }
 
         /// <summary>
+        /// Изменение позиции блока
+        /// </summary>
+        /// <param name="x">x-координата</param>
+        /// <param name="y">y-координата</param>
+        public override void Move(float x, float y)
+        {
+            base.Move(x, y);
+            if (text != null)
+            {
+                text.Move(x, y);
+            }   
+        }
+
+        /// <summary>
         /// Получение имени блока
         /// </summary>
         /// <returns>Имя блока</returns>
@@ -211,6 +225,18 @@ namespace DrawNassiOpenGL.Models
         {
             return "Block";
         }
+
+        /// <summary>
+        /// Добавление блока внутрь
+        /// </summary>
+        /// <param name="block">Блок для добавления</param>
+        public abstract void Add(Block block);
+
+        /// <summary>
+        /// Удаления блока изнутри
+        /// </summary>
+        /// <param name="block">Внутренний блок</param>
+        public abstract void Remove(Block block);
 
         #endregion
     }

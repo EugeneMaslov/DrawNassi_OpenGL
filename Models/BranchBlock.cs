@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using DrawNassiOpenGL.DNDEngine.TextRenderer;
+using DrawNassiOpenGL.Models.Composite;
 
 namespace DrawNassiOpenGL.Models
 {
-    public class BranchBlock : Block
+    public class BranchBlock : UnitBlock
     {
         public BranchBlock()
         {

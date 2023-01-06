@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
-using DrawNassiOpenGL.Models;
 using DrawNassiOpenGL.DNDEngine.Shaders;
 using DrawNassiOpenGL.DNDEngine.Objects;
 
@@ -46,9 +45,9 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
         private string text;
 
         /// <summary>
-        /// Ссылка на родительский блок
+        /// Ссылка на родительский объект
         /// </summary>
-        private Block block;
+        private SimpleObject simpleObject;
 
         #endregion
         #region Properties
@@ -56,15 +55,15 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
         /// <summary>
         /// Свойство для обращения к родительскому блоку
         /// </summary>
-        public Block Block
+        public SimpleObject Block
         {
             get
             {
-                return block;
+                return simpleObject;
             }
             set
             {
-                block = value;
+                simpleObject = value;
             }
         }
 
@@ -79,7 +78,11 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
             }
             set
             {
-                text = value;
+                if (text != null && text != "")
+                {
+                    text = value;
+                }
+                else text = "Uncorrect";
             }
         }
 
@@ -134,10 +137,10 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
         /// <summary>
         /// Конструктор по умолчанию
         /// </summary>
-        public TextRenderer(Block block)
+        public TextRenderer(SimpleObject simp)
         {
             DoStandartValues();
-            this.block = block;
+            this.simpleObject = simp;
         }
 
         /// <summary>
@@ -152,7 +155,7 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
         /// <param name="fontStyle">Стиль текста</param>
         /// <param name="text">Текст</param>
         /// <param name="block">Блок к которому привязан текст</param>
-        public TextRenderer(float width, float height, float x, float y, Color4 textColor, FontFamily fontFamily, FontStyle fontStyle, string text, Block block)
+        public TextRenderer(float width, float height, float x, float y, Color4 textColor, FontFamily fontFamily, FontStyle fontStyle, string text, SimpleObject simpleObject)
         {
             X = x;
             Y = y;
@@ -160,7 +163,7 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
             Width = width;
             Height = height;
             family = fontFamily;
-            this.block = block;
+            this.simpleObject = simpleObject;
             this.textColor = textColor;
             this.text = text;
         }
@@ -255,10 +258,10 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
             if (text.Length * (Height / text.Length * 2) * 2 > Width)
             {
                 Width = text.Length * (Height / text.Length * 2) * 2.5f;
-                if (Width > block.Width)
+                if (Width > simpleObject.Width)
                 {
-                    block.Width = Width;
-                    block.ReInit();
+                    simpleObject.Width = Width;
+                    simpleObject.ReInit();
                 }
             }
 
