@@ -143,36 +143,9 @@ namespace DrawNassiOpenGL.Models
         /// </summary>
         protected override void GLInitialization()
         {
-            if (shader == null) shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
-
-            _vaoModel = GL.GenVertexArray();
-            GL.BindVertexArray(_vaoModel);
-
-            _vertexBufferObject = GL.GenBuffer();
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, Vertices.Length * sizeof(float), Vertices, BufferUsageHint.StaticDraw);
-
-            _elementBufferObject = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, Indices.Length * sizeof(uint), Indices, BufferUsageHint.StaticDraw);
-
-            var positionLocation = shader.GetAttribLocation("aPosition");
-            GL.EnableVertexAttribArray(positionLocation);
-            GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
-
-            var aColor = shader.GetAttribLocation("aColor");
-            GL.EnableVertexAttribArray(aColor);
-            GL.VertexAttribPointer(aColor, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
-
-            GL.BindVertexArray(0);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-            GL.DisableVertexAttribArray(positionLocation);
-            GL.DisableVertexAttribArray(aColor);
-
-            shader.Use();
+            _shaderVertPath = "Shaders/shader.vert";
+            _shaderFragPath = "Shaders/shader.frag";
+            base.GLInitialization();
         }
 
         /// <summary>
@@ -188,6 +161,9 @@ namespace DrawNassiOpenGL.Models
             contourWidth = 5f;
         }
 
+        /// <summary>
+        /// Реинициализация блока
+        /// </summary>
         public override void ReInit()
         {
             base.ReInit();
@@ -202,24 +178,35 @@ namespace DrawNassiOpenGL.Models
         /// </summary>
         public override void Draw()
         {
+            base.Draw();
+
             if (text != null)
             {
                 text.Draw();
             }
         }
 
-        public virtual void Stick(Block block)
+        /// <summary>
+        /// Слепление блока к другому
+        /// </summary>
+        /// <param name="simp">Блок для скрепления</param>
+        public override bool Stick(SimpleObject simp)
         {
-            if (block != null)
+            if (base.Stick(simp))
             {
-                if (IsColisionForSticking(block))
+                if (text != null)
                 {
-                    Move(block.X, block.Y - Height);
                     text.Move(X, Y);
+                    return true;
                 }
             }
+            return false;
         }
 
+        /// <summary>
+        /// Получение имени блока
+        /// </summary>
+        /// <returns>Имя блока</returns>
         public override string GetName()
         {
             return "Block";

@@ -58,7 +58,7 @@ namespace DrawNassiOpenGL.Models
         protected override void GenVertices()
         {
             Vertices = new float[] {
-                // vertices                                                                                 //colors
+                                                // vertices                                                                                 //colors
                  0,                                                  Height/MINIMIZATIONY,                                0.0f,  BlockColor.R,   BlockColor.G,   BlockColor.B,
                  Width/MINIMIZATIONX,                                Height/MINIMIZATIONY,                                0.0f,  BlockColor.R,   BlockColor.G,   BlockColor.B,
                  Width/MINIMIZATIONX,                                0,                                                   0.0f,  BlockColor.R,   BlockColor.B,   BlockColor.B,
@@ -98,16 +98,6 @@ namespace DrawNassiOpenGL.Models
                 5, 9, 15,
                 9, 14, 15,
             };
-        }
-
-        public override void Draw()
-        {
-            BindVAO();
-            
-            GL.DrawElements(BeginMode.Triangles, Indices.Length, DrawElementsType.UnsignedInt, 0);
-
-            UnbindVAO();
-            base.Draw();
         }
 
         public override string GetName()

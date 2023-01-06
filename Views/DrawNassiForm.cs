@@ -61,7 +61,7 @@ namespace DrawNassiOpenGL.Views
 
         private void button1_Click(object sender, EventArgs e)
         {
-            blockView.AddBlock(BlockFactory.MakeBlock(this.textBox1.Text, 0, 0, 200, 100, "Sample", Color4.White, Color4.Black, Color4.Black, 3.5f));
+            blockView.AddBlock(BlockFactory.MakeBlock(this.textBox1.Text, 0, 0, 200, 100, "Sample", Color4.White, Color4.Black, Color4.Black, 5f));
         }
 
         

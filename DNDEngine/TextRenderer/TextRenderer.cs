@@ -13,6 +13,9 @@ using DrawNassiOpenGL.DNDEngine.Objects;
 
 namespace DrawNassiOpenGL.DNDEngine.TextRenderer
 {
+    /// <summary>
+    /// Класс рендера текста
+    /// </summary>
     public class TextRenderer : SimpleObject
     {
         #region Fields
@@ -249,8 +252,6 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
             GL.EnableVertexAttribArray(aTexCoords);
             GL.VertexAttribPointer(aTexCoords, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
 
-
-
             if (text.Length * (Height / text.Length * 2) * 2 > Width)
             {
                 Width = text.Length * (Height / text.Length * 2) * 2.5f;
@@ -310,6 +311,5 @@ namespace DrawNassiOpenGL.DNDEngine.TextRenderer
         }
 
         #endregion
-
     }
 }

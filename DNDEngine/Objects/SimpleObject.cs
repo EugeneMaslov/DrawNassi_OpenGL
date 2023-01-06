@@ -54,6 +54,16 @@ namespace DrawNassiOpenGL.DNDEngine.Objects
         private uint[] _indices;
 
         /// <summary>
+        /// Путь к шейдеру вертексов
+        /// </summary>
+        protected string _shaderVertPath;
+
+        /// <summary>
+        /// Путь к шейдеру фрагментов
+        /// </summary>
+        protected string _shaderFragPath;
+
+        /// <summary>
         /// Шейдер
         /// </summary>
         protected Shader shader;
@@ -80,6 +90,7 @@ namespace DrawNassiOpenGL.DNDEngine.Objects
 
         #endregion
         #region Properties
+
         /// <summary>
         /// Ширина объекта (свойство)
         /// </summary>
@@ -169,18 +180,46 @@ namespace DrawNassiOpenGL.DNDEngine.Objects
                 }
             }
         }
+
         #endregion
         #region Methods
 
         /// <summary>
-        /// Задает вертексы блока
-        /// </summary>
-        protected abstract void GenVertices();
-
-        /// <summary>
         /// Инициализация VBO-VAO для объекта
         /// </summary>
-        protected abstract void GLInitialization();
+        protected virtual void GLInitialization()
+        {
+            if (shader == null) shader = new Shader(_shaderVertPath, _shaderFragPath);
+
+            _vaoModel = GL.GenVertexArray();
+            GL.BindVertexArray(_vaoModel);
+
+            _vertexBufferObject = GL.GenBuffer();
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
+            GL.BufferData(BufferTarget.ArrayBuffer, Vertices.Length * sizeof(float), Vertices, BufferUsageHint.StaticDraw);
+
+            _elementBufferObject = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, Indices.Length * sizeof(uint), Indices, BufferUsageHint.StaticDraw);
+
+            var positionLocation = shader.GetAttribLocation("aPosition");
+            GL.EnableVertexAttribArray(positionLocation);
+            GL.VertexAttribPointer(positionLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
+
+            var aColor = shader.GetAttribLocation("aColor");
+            GL.EnableVertexAttribArray(aColor);
+            GL.VertexAttribPointer(aColor, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
+
+            GL.BindVertexArray(0);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            GL.DisableVertexAttribArray(positionLocation);
+            GL.DisableVertexAttribArray(aColor);
+
+            shader.Use();
+        }
 
         /// <summary>
         /// Бинд VAO-объекта
@@ -279,18 +318,14 @@ namespace DrawNassiOpenGL.DNDEngine.Objects
         /// <summary>
         /// Отрисовка объекта
         /// </summary>
-        public abstract void Draw();
+        public virtual void Draw()
+        {
+            BindVAO();
 
-        /// <summary>
-        /// Устанавливает стандартные значения объекта
-        /// </summary>
-        protected abstract void DoStandartValues();
+            GL.DrawElements(BeginMode.Triangles, Indices.Length, DrawElementsType.UnsignedInt, 0);
 
-        /// <summary>
-        /// Возвращает имя объекта
-        /// </summary>
-        /// <returns>Возвращает имя объекта</returns>
-        public abstract string GetName();
+            UnbindVAO();
+        }
 
         /// <summary>
         /// Вычисляет коллизию курсора
@@ -312,6 +347,11 @@ namespace DrawNassiOpenGL.DNDEngine.Objects
         }
 
 
+        /// <summary>
+        /// Проверяет колизию для слепления объектов снизу
+        /// </summary>
+        /// <param name="simp"></param>
+        /// <returns></returns>
         public virtual bool IsColisionForSticking(SimpleObject simp)
         {
             if (Y + Height <= simp.Y && Y >= simp.Y - simp.Height * 1.5 && this != simp)
@@ -320,6 +360,40 @@ namespace DrawNassiOpenGL.DNDEngine.Objects
             }
             return false;
         }
+
+        /// <summary>
+        /// Слепление объекта к другому
+        /// </summary>
+        /// <param name="simp"></param>
+        /// <returns></returns>
+        public virtual bool Stick(SimpleObject simp)
+        {
+            if (simp != null)
+            {
+                if (IsColisionForSticking(simp))
+                {
+                    Move(simp.X, simp.Y - Height);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Устанавливает стандартные значения объекта
+        /// </summary>
+        protected abstract void DoStandartValues();
+
+        /// <summary>
+        /// Возвращает имя объекта
+        /// </summary>
+        /// <returns>Возвращает имя объекта</returns>
+        public abstract string GetName();
+
+        /// <summary>
+        /// Задает вертексы блока
+        /// </summary>
+        protected abstract void GenVertices();
 
         #endregion
     }

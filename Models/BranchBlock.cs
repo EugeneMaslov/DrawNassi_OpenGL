@@ -69,12 +69,12 @@ namespace DrawNassiOpenGL.Models
                  0,                                                           Height/MINIMIZATIONY/2 + ContourWidth/MINIMIZATIONY/2,                    0.0f,  ContourColor.R, ContourColor.G, ContourColor.B, 
                  Width/MINIMIZATIONX,                                         Height/MINIMIZATIONY/2 + ContourWidth/MINIMIZATIONY/2,                    0.0f,  ContourColor.R, ContourColor.G, ContourColor.B, //MIDDLE -
                  Width/MINIMIZATIONX,                                         Height/MINIMIZATIONY/2 - ContourWidth/MINIMIZATIONY/2,                    0.0f,  ContourColor.R, ContourColor.G, ContourColor.B,
-                 0,                                                           Height/MINIMIZATIONY/2 - ContourWidth/MINIMIZATIONY/2,                    0.0f,  ContourColor.R, ContourColor.G, ContourColor.B, //26
+                 0,                                                           Height/MINIMIZATIONY/2 - ContourWidth/MINIMIZATIONY/2,                    0.0f,  ContourColor.R, ContourColor.G, ContourColor.B, 
 
                  Width/MINIMIZATIONX/2 - ContourWidth/MINIMIZATIONX/2,        Height/MINIMIZATIONY/2 - ContourWidth/MINIMIZATIONY/2,                    0.0f,  ContourColor.R, ContourColor.G, ContourColor.B,
                  Width/MINIMIZATIONX/2 - ContourWidth/MINIMIZATIONX/2,        0 + ContourWidth/MINIMIZATIONY,                                           0.0f,  ContourColor.R, ContourColor.G, ContourColor.B, //DOWN MIDDLE |
                  Width/MINIMIZATIONX/2 + ContourWidth/MINIMIZATIONX/2,        0 + ContourWidth/MINIMIZATIONY,                                           0.0f,  ContourColor.R, ContourColor.G, ContourColor.B, 
-                 Width/MINIMIZATIONX/2 + ContourWidth/MINIMIZATIONX/2,        Height/MINIMIZATIONY/2 + ContourWidth/MINIMIZATIONY/2,                    0.0f,  ContourColor.R, ContourColor.G, ContourColor.B, //30
+                 Width/MINIMIZATIONX/2 + ContourWidth/MINIMIZATIONX/2,        Height/MINIMIZATIONY/2 + ContourWidth/MINIMIZATIONY/2,                    0.0f,  ContourColor.R, ContourColor.G, ContourColor.B, 
             };
 
             Indices = new uint[]
@@ -106,16 +106,6 @@ namespace DrawNassiOpenGL.Models
                 27, 28, 30,
                 28, 29, 30
             };
-        }
-
-        public override void Draw()
-        {
-            BindVAO();
-
-            GL.DrawElements(BeginMode.Triangles, Indices.Length, DrawElementsType.UnsignedInt, 0);
-
-            UnbindVAO();
-            base.Draw();
         }
 
         public override string GetName()
